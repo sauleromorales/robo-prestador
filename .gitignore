@@ -1,0 +1,17 @@
+# dados reais: nunca versionar
+config.json
+dados/
+logs/
+descoberta/
+testes/saida/
+
+# executavel e build
+*.exe
+build/
+dist/
+*.spec
+
+# python
+__pycache__/
+*.pyc
+.venv/

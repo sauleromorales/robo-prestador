@@ -1,0 +1,45 @@
+{
+  "portal_url": "https://portal.seguradora.example",
+  "lista_os_url": "https://portal.seguradora.example/PortalPrestador/service-orders",
+  "cdp_url": "http://localhost:9222",
+
+  "responsavel": "Nome do Responsável Técnico",
+  "os_prestador": "",
+
+  "status_alvo": "Nova",
+  "dias_maximo": 120,
+  "etapas_ativas": ["Iniciar OS", "Agendar Retirada"],
+  "canal_leva_traz": "Leva & Traz",
+  "canais_confirmar_cliente": ["Logistica"],
+  "canal_balcao": "Balcão",
+  "confirmou_inicia_mesmo_em_teste": true,
+  "anotacao_logistica": "Prezados, feito contato com o cliente, que confirmou que fará o envio do produto. Aguardando o envio!",
+  "objetivo_leva_traz": "COLETA SEGURADORA / {marca}",
+  "dias_os_antiga": 30,
+  "horas_pulada": 24,
+  "max_erros_dia": 3,
+
+  "nome_assistencia": "Minha Assistência",
+  "whatsapp_app": true,
+  "whatsapp_enviar_sozinho": false,
+  "whatsapp_espera_segundos": 3,
+  "endereco_balcao": "",
+
+  "superfrete_ativo": true,
+  "superfrete_ambiente": "sandbox",
+  "superfrete_email": "",
+  "caixa_padrao": {"height": 30, "width": 30, "length": 30, "weight": 3},
+  "remetente": {"name": "Nome Sobrenome", "address": "Rua Exemplo", "number": "100", "complement": "",
+                "district": "Centro", "city": "Cidade", "state_abbr": "SC", "postal_code": "00000000"},
+  "anotacao_rastreio": "Prezados, produto consertado e devolvido ao cliente pelos Correios. Código de rastreio: {codigo}",
+
+  "max_rolagens": 30,
+  "intervalo_minutos": 10,
+  "relogar_sozinho": true,
+
+  "modo": "assistido",
+  "dry_run": true,
+  "som_alertas": true,
+
+  "pasta_logs": "logs"
+}
