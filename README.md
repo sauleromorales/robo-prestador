@@ -41,12 +41,33 @@ Um robô de desktop que:
    recarga no site do intermediador e manda para o dono por WhatsApp.
 7. **Alimenta o sistema interno da empresa**: as coletas (Leva & Traz) entram sozinhas no
    sistema de atendimentos de campo, pela API dele.
-8. **Mostra o que está fazendo** com um mascote animado no canto da tela: azul quando está
-   tudo em dia, verde trabalhando, amarelo precisando de alguém, vermelho com problema.
+8. **Mostra o que está fazendo** com um mascote animado no canto da tela: luzes verdes quando
+   está tudo em dia, **acenando** em laranja quando há tarefa para a equipe, âmbar conferindo
+   o portal ou precisando de alguém, vermelho com problema.
 
-| Janela de tarefas | Depois do conserto (etiqueta) |
+![Janela de tarefas em modo foco](docs/img/janela-tarefas.png)
+
+| Balcão | Depois do conserto (etiqueta) |
 |---|---|
-| ![Janela de tarefas](docs/img/janela-tarefas.png) | ![Pós-conserto](docs/img/janela-pos-conserto.png) |
+| ![Balcão](docs/img/janela-balcao.png) | ![Pós-conserto](docs/img/janela-pos-conserto.png) |
+
+### A interface (redesign de 24/11)
+
+O visual nasceu de um canvas de design (robô, balão e janela) e foi reproduzido no `Canvas`
+do tkinter, sem bibliotecas de interface:
+
+- **Mascote:** robô de armadura grafite com olhos de LED. O humor segue o estado do robô:
+  feliz, concentrado (olhos apertados) ou **acenando** quando há tarefa. O braço é um
+  polígono girado a cada quadro; o SVG tem gradientes e brilho, que viram cores misturadas.
+- **Balão:** a hora da última busca, o resumo do ciclo em números ("1 feita · 5 já feitas
+  antes"), a contagem para a próxima conferência com barra e o botão "N tarefas para a
+  equipe · Abrir".
+- **Janela em modo foco:** à esquerda a fila de tudo que espera a equipe, por grupo; à
+  direita só o cliente escolhido, em dois passos: **1. Fale com o cliente** (telefone,
+  abrir o WhatsApp, outro número, mensagem pronta para copiar e as tentativas já feitas) e
+  **2. O que o cliente respondeu?** (botões grandes). Marcou a resposta, abre o próximo.
+- Tudo é copiável: um clique copia sinistro, OS, produto ou telefone; o botão direito abre
+  "Copiar tudo".
 
 ---
 
@@ -132,9 +153,12 @@ flowchart LR
         L1[OS nova] --> L2[WhatsApp:<br/>'vai enviar?'] --> L3{Cliente}
         L3 -- sim --> L4[Equipe: Confirmou] --> L5[Robô inicia a OS<br/>+ anotação 'aguardando envio']
         L3 -- não --> L6[Equipe: Não vai enviar] --> L7[Robô anota na OS<br/>e encerra a tarefa]
+        L3 -- "sem resposta<br/>3 mensagens" --> L8[Robô anota<br/>'tentativas de contato excedido']
+        L2 -- "nenhum nº tem<br/>WhatsApp" --> L9[Robô anota que falta<br/>um telefone correto]
     end
     subgraph BAL["Balcão (cliente leva na loja)"]
         B1[OS nova] --> B2[WhatsApp: 'aguardamos<br/>no balcão'] --> B3[Equipe: Já avisei] --> B4[Robô inicia a OS]
+        B2 --> B5[Equipe: Não vai trazer] --> B6[Robô anota na OS]
     end
     subgraph LT["Leva & Traz (coleta na casa)"]
         T1[OS nova] --> T0[Cadastra a visita no<br/>sistema interno] --> T2[Robô inicia] --> T3[Agenda retirada com o<br/>endereço DA PRÓPRIA OS] --> T4[Linha pronta<br/>para a planilha de rotas]
@@ -287,7 +311,8 @@ stateDiagram-v2
   lista nova marcando os cards antigos (o Angular reaproveita o DOM) e busca pelo nº do
   sinistro, que é como a equipe trabalha.
 - **Interface sem dependências**: o mascote, os cartões arredondados, os botões e o ícone
-  são desenhados no `Canvas` do tkinter a partir de um mockup de design. O ícone é gerado
+  são desenhados no `Canvas` do tkinter a partir de um mockup de design (polígonos
+  arredondados e girados, halos de cor no lugar do blur do SVG). O ícone é gerado
   em PNG/ICO **sem Pillow**, com supersampling e `zlib`.
 - **Testes sem tocar na produção**: a OS salva em HTML é aberta num Edge headless separado,
   com um "portal falso", para simular o agendamento (inclusive o bug do formulário de outro
@@ -318,9 +343,10 @@ Mermaid para a documentação.
 | `recursos/` | gerador do ícone e do `.exe` |
 | `manutencao/` | scripts para mapear telas do portal quando o layout muda |
 
-> O código deste repositório é a versão anonimizada de 04/11. Os módulos criados depois
-> (impressão da etiqueta, envio conferido de WhatsApp, cadastro no sistema interno e
-> recarga do saldo) estão descritos acima e ficam no repositório privado.
+> O código deste repositório é a versão anonimizada de 04/11. O que veio depois (impressão
+> da etiqueta, envio conferido de WhatsApp, cadastro no sistema interno, recarga do saldo,
+> tentativas de contato e a interface de 24/11) está descrito acima e fica no repositório
+> privado. Os prints usam dados inventados.
 
 ## Como rodar
 
